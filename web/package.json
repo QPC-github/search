@@ -1,0 +1,35 @@
+{
+  "name": "ietf-typesense-web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+    "format": "prettier --write src/"
+  },
+  "dependencies": {
+    "algoliasearch": "^4.17.0",
+    "bootstrap": "^5.2.3",
+    "bootstrap-icons": "^1.10.5",
+    "instantsearch.css": "^8.0.0",
+    "naive-ui": "^2.34.3",
+    "pinia": "^2.0.32",
+    "typesense-instantsearch-adapter": "^2.6.0",
+    "vue": "^3.2.47",
+    "vue-instantsearch": "^4.9.0",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "@rushstack/eslint-patch": "^1.2.0",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/eslint-config-prettier": "^7.1.0",
+    "eslint": "^8.34.0",
+    "eslint-plugin-vue": "^9.9.0",
+    "prettier": "^2.8.4",
+    "pug": "^3.0.2",
+    "sass": "^1.62.1",
+    "vite": "^4.1.4"
+  }
+}

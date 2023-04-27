@@ -1,0 +1,15 @@
+{
+  "name": "import",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "IETF Tools",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "typesense": "^1.5.3"
+  }
+}
