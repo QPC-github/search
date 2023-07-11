@@ -1,0 +1,28 @@
+{
+  "name": "datatracker",
+  "private": true,
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@types/node": "18.16.19",
+    "autoprefixer": "10.4.14",
+    "daisyui": "3.2.1",
+    "nuxt": "3.6.2",
+    "postcss": "8.4.25",
+    "prettier": "3.0.0",
+    "prettier-plugin-tailwindcss": "0.3.0",
+    "tailwindcss": "3.3.2"
+  },
+  "dependencies": {
+    "@nuxtjs/algolia": "1.8.0",
+    "algoliasearch": "4.18.0",
+    "typesense-instantsearch-adapter": "2.7.0",
+    "vue-instantsearch": "4.10.5"
+  }
+}
