@@ -1,7 +1,7 @@
 FROM node:18
 
 COPY . /app/
-COPY ./output /app/.output
+COPY ./.output /app/.output
 
 WORKDIR /app
 
