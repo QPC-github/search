@@ -1,10 +1,11 @@
 FROM node:18
 
 COPY . /app/
+COPY ./output /app/.output
 
 WORKDIR /app
 
-RUN npm install
+# RUN npm ci
 
 EXPOSE 3000
 
