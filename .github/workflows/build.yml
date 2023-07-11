@@ -15,11 +15,11 @@ jobs:
       with:
         node-version: 18.x
 
-    - name: Build Server
+    - name: Build Static Files
       working-directory: ui
       run: |
         npm ci
-        npm run build
+        npm run generate
     
     - name: Docker Setup QEMU
       uses: docker/setup-qemu-action@v2

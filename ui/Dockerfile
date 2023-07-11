@@ -1,12 +1,3 @@
-FROM node:18
+FROM nginx:latest
 
-COPY . /app/
-# COPY ./.output /app/.output
-
-WORKDIR /app
-
-# RUN npm ci
-
-EXPOSE 3000
-
-CMD ["node", "./.output/server/index.mjs"]
+COPY ./.output/public /usr/share/nginx/html
