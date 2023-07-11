@@ -1,7 +1,7 @@
 FROM node:18
 
 COPY . /app/
-COPY ./.output /app/.output
+# COPY ./.output /app/.output
 
 WORKDIR /app
 
@@ -9,4 +9,4 @@ WORKDIR /app
 
 EXPOSE 3000
 
-CMD ["node", "./output/server/index.mjs"]
+CMD ["node", "./.output/server/index.mjs"]
