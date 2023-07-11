@@ -12,11 +12,11 @@
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Keywords</span>
-                <ais-refinement-list attribute="keywords" :limit="5" class="mt-2" />
+                <ais-refinement-list attribute="keywords" :transform-items="cleanRefinementItems" :limit="5" class="mt-2" />
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Author</span>
-                <ais-refinement-list attribute="authors" :limit="5" class="mt-2" />
+                <ais-refinement-list attribute="authors" :transform-items="cleanRefinementItems" :limit="5" class="mt-2" />
               </div>
               <ais-clear-refinements class="mt-4" />
             </div>
@@ -72,7 +72,6 @@ import 'instantsearch.css/themes/satellite.css'
 import {
   AisInstantSearch,
   AisSearchBox,
-  AisDynamicWidgets,
   AisStats,
   AisInfiniteHits,
   AisRefinementList,
@@ -103,4 +102,8 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
 
 const indexName = 'documents' 
 const searchClient = typesenseInstantsearchAdapter.searchClient
+
+function cleanRefinementItems (items) {
+  return items.filter(item => item.label?.trim())
+}
 </script>
