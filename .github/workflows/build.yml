@@ -1,0 +1,35 @@
+name: Build Docker Image
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Docker Setup QEMU
+      uses: docker/setup-qemu-action@v2
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+      
+    - name: Docker Login
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Docker Build & Push
+      uses: docker/build-push-action@v4
+      with:
+        context: ./ui
+        file: Dockerfile
+        platforms: linux/amd64,linux/arm64
+        provenance: false
+        sbom: false
+        push: true
+        tags: ghcr.io/ietf-tools/search-ui:latest
