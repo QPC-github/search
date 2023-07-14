@@ -10,19 +10,19 @@
                 <span class="font-medium">Type</span>
                 <ais-refinement-list attribute="type" class="mt-2" />
               </div>
-              <div class="card bg-zinc-50 p-4 shadow-md">
+              <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">State</span>
                 <ais-refinement-list attribute="state" :limit="5" class="mt-2" />
               </div>
-              <div class="card bg-zinc-50 p-4 shadow-md">
+              <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Group</span>
                 <ais-refinement-list attribute="group" class="mt-2" />
               </div>
-              <div class="card bg-zinc-50 p-4 shadow-md">
+              <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Area</span>
                 <ais-refinement-list attribute="area" class="mt-2" />
               </div>
-              <div class="card bg-zinc-50 p-4 shadow-md">
+              <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Area Director</span>
                 <ais-refinement-list attribute="adName" :limit="5" class="mt-2" />
               </div>
