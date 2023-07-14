@@ -7,16 +7,36 @@
           <aside class="w-full sm:w-1/3 md:w-1/4 px-2">
             <div class="sticky top-0 px-2 w-full">
               <div class="card bg-zinc-50 p-4 shadow-md">
-                <span class="font-medium">Status</span>
-                <ais-refinement-list attribute="status" class="mt-2" />
+                <span class="font-medium">Type</span>
+                <ais-refinement-list attribute="type" class="mt-2" />
               </div>
-              <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
+              <div class="card bg-zinc-50 p-4 shadow-md">
+                <span class="font-medium">State</span>
+                <ais-refinement-list attribute="state" :limit="5" class="mt-2" />
+              </div>
+              <div class="card bg-zinc-50 p-4 shadow-md">
+                <span class="font-medium">Group</span>
+                <ais-refinement-list attribute="group" class="mt-2" />
+              </div>
+              <div class="card bg-zinc-50 p-4 shadow-md">
+                <span class="font-medium">Area</span>
+                <ais-refinement-list attribute="area" class="mt-2" />
+              </div>
+              <div class="card bg-zinc-50 p-4 shadow-md">
+                <span class="font-medium">Area Director</span>
+                <ais-refinement-list attribute="adName" :limit="5" class="mt-2" />
+              </div>
+              <!-- <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Keywords</span>
                 <ais-refinement-list attribute="keywords" :transform-items="cleanRefinementItems" :limit="5" class="mt-2" />
+              </div> -->
+              <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
+                <span class="font-medium">Stream</span>
+                <ais-refinement-list attribute="stream" :limit="5" class="mt-2" />
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Author</span>
-                <ais-refinement-list attribute="authors" :transform-items="cleanRefinementItems" :limit="5" class="mt-2" />
+                <ais-refinement-list attribute="authors" :limit="5" class="mt-2" />
               </div>
               <ais-clear-refinements class="mt-4" />
             </div>
@@ -96,11 +116,11 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   //  So you can pass any parameters supported by the search endpoint below.
   //  query_by is required.
   additionalSearchParameters: {
-    query_by: "title,abstract,keywords,authors",
+    query_by: "ref,title,abstract,keywords,authors,adName,group,groupName,area,areaName",
   }
 })
 
-const indexName = 'documents' 
+const indexName = 'docs' 
 const searchClient = typesenseInstantsearchAdapter.searchClient
 
 function cleanRefinementItems (items) {
