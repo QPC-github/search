@@ -101,7 +101,7 @@ import TypesenseInstantSearchAdapter from 'typesense-instantsearch-adapter'
 
 const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   server: {
-    apiKey: "B7mDVZr4lFfk4qakjwZeHGUv0s508GAE", // Be sure to use an API key that only allows search operations
+    apiKey: "xf3EOyUrqUehUeqKiveKiVdv1wZu5fTi", // Be sure to use an API key that only allows search operations
     nodes: [
       {
         host: "ts.dev.ietf.org",

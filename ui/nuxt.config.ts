@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     '@nuxtjs/algolia'
   ],
   algolia: {
-    apiKey: 'B7mDVZr4lFfk4qakjwZeHGUv0s508GAE',
+    apiKey: 'xf3EOyUrqUehUeqKiveKiVdv1wZu5fTi',
     applicationId: 'typesense',
     instantSearch: {
       theme: 'satellite'
