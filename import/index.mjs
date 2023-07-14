@@ -189,12 +189,10 @@ async function main () {
         state: r.states.map(s => s[0]) ?? [],
         stream: r.stream_id ?? '',
         authors: r.authors.map(a => a[1] ? `${a[0]} (${a[1]})` : a[0]) ?? [],
-        adName: r.adName ?? ''
+        adName: r.adname ?? ''
       })
     }
-    console.info(docs)
     await ts.collections('docs').documents().import(docs, { action: 'create', batch_size: 100 })
-    return sql.CLOSE
     idx++
   })
 

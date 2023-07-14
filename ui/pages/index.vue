@@ -1,7 +1,7 @@
 <template>
   <div>
     <HomeHero></HomeHero>
-    <ais-instant-search :index-name="indexName" :search-client="searchClient">
+    <ais-instant-search :index-name="indexName" :search-client="searchClient" :initial-ui-state="initialUiState">
       <div class="container mx-auto">
         <div class="flex flex-row flex-wrap pb-4">
           <aside class="w-full sm:w-1/3 md:w-1/4 px-2">
@@ -122,6 +122,14 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
 
 const indexName = 'docs' 
 const searchClient = typesenseInstantsearchAdapter.searchClient
+
+const initialUiState = {
+  docs: {
+    refinementList: {
+      type: ['draft']
+    }
+  }
+}
 
 function cleanRefinementItems (items) {
   return items.filter(item => item.label?.trim())
