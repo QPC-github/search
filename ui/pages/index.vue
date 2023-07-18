@@ -20,11 +20,11 @@
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Group</span>
-                <ais-refinement-list attribute="group" class="mt-2" />
+                <ais-refinement-list attribute="group" :limit="10" show-more class="mt-2" />
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Area</span>
-                <ais-refinement-list attribute="area" class="mt-2" />
+                <ais-refinement-list attribute="area" :limit="10" show-more class="mt-2" />
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Area Director</span>
@@ -68,12 +68,16 @@
                     <div class="flex flex-row">
                       <h1 class="font-medium grow">{{ item.title }}</h1>
                       <span v-if="item.ref" class="text-sm font-medium text-rose-800">{{ item.ref.toUpperCase() }}</span>
+                      <span v-else class="text-sm font-medium text-teal-800">{{ typeLabels[item.type] ?? '' }}</span>
                     </div>
                     <span class="text-sm font-medium text-gray-600">{{ item.filename }}</span>
                     <span class="text-sm line-clamp-2 mt-2"><em>{{ item.abstract }}</em></span>
                     <div class="flex flex-row mt-2">
-                      <span class="text-sm font-medium text-sky-700 grow">{{ item.authors?.map(a => a.name).join(', ') }}</span>
-                      <span class="text-sm font-medium text-teal-800">{{ typeLabels[item.type] ?? '' }}</span>
+                      <div class="text-sm font-medium text-sky-700 grow">{{ item.authors?.map(a => a.name).join(', ') }}</div>
+                      <div v-if="item.groupName" class="text-right">
+                        <div class="text-sm text-orange-800">{{ item.groupName }}</div>
+                        <div v-if="item.areaName" class="text-xs text-orange-800">{{ item.areaName }}</div>
+                      </div>
                     </div>
                   </li>
                   <li v-if="!isLastPage">
@@ -120,7 +124,7 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   //  So you can pass any parameters supported by the search endpoint below.
   //  query_by is required.
   additionalSearchParameters: {
-    query_by: "ref,filename,aliases,title,abstract,keywords,authors,adName,group,groupName,area,areaName",
+    query_by: "rfcNumber,ref,filename,aliases,title,abstract,keywords,authors,adName,group,groupName,area,areaName",
   }
 })
 

@@ -30,6 +30,12 @@ async function main () {
     enable_nested_fields: true,
     fields: [
       {
+        name: 'rfcNumber',
+        type: 'string',
+        facet: false,
+        optional: true
+      },
+      {
         name: 'ref',
         type: 'string',
         facet: false,
@@ -69,7 +75,8 @@ async function main () {
       {
         name: 'state',
         type: 'object[]',
-        facet: true
+        facet: true,
+        optional: true
       },
       {
         name: 'pages',
@@ -89,22 +96,26 @@ async function main () {
       {
         name: 'group',
         type: 'string',
-        facet: true
+        facet: true,
+        optional: true
       },
       {
         name: 'groupName',
         type: 'string',
-        facet: false
+        facet: false,
+        optional: true
       },
       {
         name: 'area',
         type: 'string',
-        facet: true
+        facet: true,
+        optional: true
       },
       {
         name: 'areaName',
         type: 'string',
-        facet: false
+        facet: false,
+        optional: true
       },
       {
         name: 'stream',
@@ -140,7 +151,7 @@ async function main () {
         SELECT ARRAY[ds.slug, ds.name, ds.type_id]
         FROM doc_document_states dds
         LEFT JOIN doc_state ds on dds.state_id = ds.id
-        WHERE dds.document_id = doc.id
+        WHERE dds.document_id = doc.id AND ds.type_id = 'draft'
       ) AS states,
       array(
         SELECT ARRAY[pp.name, da.affiliation]
@@ -192,10 +203,21 @@ async function main () {
         r.states = r.states.filter(s => s[0] !== 'rfc')
         r.type_id = 'rfc'
         r.ref = _.find(r.aliases, a => a.startsWith('rfc'))
+        r.rfcNumber = r.ref?.substring(3)
+      }
+
+      if (r.states.some(s => s[0].endsWith('-rm'))) {
+        continue
+      }
+
+      if (r.groupacronym === 'none') {
+        r.areaacronym = null
+        r.areaname = null
       }
 
       docs.push({
         id: `doc-${r.id}`,
+        ...r.rfcNumber && { rfcNumber: r.rfcNumber },
         ...r.ref && { ref: r.ref },
         title: r.title?.trim() ?? r.name ?? '',
         filename: r.name ?? '',
@@ -205,10 +227,10 @@ async function main () {
         pages: _.toSafeInteger(r.pages) || 0,
         date: r.time ? DateTime.fromJSDate(r.time).toUnixInteger() : 0,
         expires: r.expires ? DateTime.fromJSDate(r.expires).toUnixInteger() : 0,
-        group: r.groupacronym ?? '',
-        groupName: r.groupname ?? '',
-        area: r.areaacronym ?? '',
-        areaName: r.areaname ?? '',
+        ...r.groupacronym && { group: r.groupacronym },
+        ...r.groupname && { groupName: r.groupname },
+        ...r.areaacronym && { area: r.areaacronym },
+        ...r.areaname && { areaName: r.areaname },
         keywords: [],
         type: r.type_id,
         state: r.states.map(s => ({
