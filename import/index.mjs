@@ -27,11 +27,13 @@ async function main () {
 
   await ts.collections().create({
     name: 'docs',
+    enable_nested_fields: true,
     fields: [
       {
         name: 'ref',
         type: 'string',
-        facet: false
+        facet: false,
+        optional: true
       },
       {
         name: 'filename',
@@ -49,6 +51,12 @@ async function main () {
         facet: false
       },
       {
+        name: 'aliases',
+        type: 'string[]',
+        facet: false,
+        optional: true
+      },
+      {
         name: 'keywords',
         type: 'string[]',
         facet: true
@@ -60,7 +68,7 @@ async function main () {
       },
       {
         name: 'state',
-        type: 'string[]',
+        type: 'object[]',
         facet: true
       },
       {
@@ -101,18 +109,21 @@ async function main () {
       {
         name: 'stream',
         type: 'string',
-        facet: true
+        facet: true,
+        optional: true
       },
       {
         name: 'authors',
-        type: 'string[]',
-        facet: true
+        type: 'object[]',
+        facet: true,
+        optional: true
       },
       {
         name: 'adName',
         type: 'string',
-        facet: true
-      },
+        facet: true,
+        optional: true
+      }
     ]
   })
 
@@ -126,7 +137,7 @@ async function main () {
       grpar.name AS areaname,
       p.name AS adName,
       array(
-        SELECT ARRAY[ds.slug, ds.type_id]
+        SELECT ARRAY[ds.slug, ds.name, ds.type_id]
         FROM doc_document_states dds
         LEFT JOIN doc_state ds on dds.state_id = ds.id
         WHERE dds.document_id = doc.id
@@ -137,11 +148,18 @@ async function main () {
         LEFT JOIN person_person pp on da.person_id = pp.id
         WHERE da.document_id = doc.id
         ORDER BY da."order"
-      ) AS authors
+      ) AS authors,
+      array(
+        SELECT name
+        FROM doc_docalias_docs ddd
+        LEFT JOIN doc_docalias dda on ddd.docalias_id = dda.id
+        WHERE ddd.document_id = doc.id
+      ) AS aliases
     FROM doc_document doc
     LEFT JOIN group_group grp ON (doc.group_id = grp.id)
     LEFT JOIN group_group grpar ON (grp.parent_id = grpar.id)
     LEFT JOIN person_person p on doc.ad_id = p.id
+    WHERE doc.type_id = 'draft'
   `.cursor(100, async rows => {
     console.info(`Importing chunk ${idx * 100}-${(idx + 1) * 100}...`)
     const docs = []
@@ -170,12 +188,19 @@ async function main () {
     //     }
     //   }
 
+      if (r.states.some(s => s[0] === 'rfc')) {
+        r.states = r.states.filter(s => s[0] !== 'rfc')
+        r.type_id = 'rfc'
+        r.ref = _.find(r.aliases, a => a.startsWith('rfc'))
+      }
+
       docs.push({
         id: `doc-${r.id}`,
-        ref: '',
+        ...r.ref && { ref: r.ref },
         title: r.title?.trim() ?? r.name ?? '',
         filename: r.name ?? '',
         abstract: r.abstract?.replace(/(?:\r\n|\r|\n)/g, ' ').trim().replaceAll(/\s\s+/g, ' ') ?? '',
+        aliases: r.aliases.map(a => a.trim()).filter(a => a),
         keywords: (r.keywords || []).map(a => a.trim()).filter(a => a),
         pages: _.toSafeInteger(r.pages) || 0,
         date: r.time ? DateTime.fromJSDate(r.time).toUnixInteger() : 0,
@@ -186,10 +211,18 @@ async function main () {
         areaName: r.areaname ?? '',
         keywords: [],
         type: r.type_id,
-        state: r.states.map(s => s[0]) ?? [],
-        stream: r.stream_id ?? '',
-        authors: r.authors.map(a => a[1] ? `${a[0]} (${a[1]})` : a[0]) ?? [],
-        adName: r.adname ?? ''
+        state: r.states.map(s => ({
+          slug: s[0],
+          name: s[1]
+        })) ?? [],
+        ...r.stream_id && { stream: r.stream_id },
+        ...r.authors.length > 0 && {
+          authors: r.authors.map(a => ({
+            name: a[0],
+            affiliation: a[1]
+          }))
+        },
+        ...r.adname && { adName: r.adname }
       })
     }
     await ts.collections('docs').documents().import(docs, { action: 'create', batch_size: 100 })

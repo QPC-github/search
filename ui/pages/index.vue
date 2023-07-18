@@ -8,11 +8,15 @@
             <div class="sticky top-0 px-2 w-full">
               <div class="card bg-zinc-50 p-4 shadow-md">
                 <span class="font-medium">Type</span>
-                <ais-refinement-list attribute="type" class="mt-2" />
+                <ais-refinement-list attribute="type" :transform-items="transformTypeFacet" class="mt-2" />
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">State</span>
-                <ais-refinement-list attribute="state" :limit="5" class="mt-2" />
+                <ais-refinement-list attribute="state.slug" :limit="5" :transform-items="transformStateFacet" show-more class="mt-2" />
+              </div>
+              <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
+                <span class="font-medium">Author</span>
+                <ais-refinement-list attribute="authors.name" searchable :limit="5" class="mt-2" />
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Group</span>
@@ -24,7 +28,7 @@
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Area Director</span>
-                <ais-refinement-list attribute="adName" :limit="5" class="mt-2" />
+                <ais-refinement-list attribute="adName" searchable :limit="5" class="mt-2" />
               </div>
               <!-- <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Keywords</span>
@@ -32,11 +36,7 @@
               </div> -->
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Stream</span>
-                <ais-refinement-list attribute="stream" :limit="5" class="mt-2" />
-              </div>
-              <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
-                <span class="font-medium">Author</span>
-                <ais-refinement-list attribute="authors" :limit="5" class="mt-2" />
+                <ais-refinement-list attribute="stream" class="mt-2" />
               </div>
               <ais-clear-refinements class="mt-4" />
             </div>
@@ -65,11 +65,15 @@
               }">
                 <ul>
                   <li v-for="item in items" :key="item.objectID" class="card bg-zinc-50 p-4 shadow-sm mb-2">
-                    <h1 class="font-medium">{{ item.title }}</h1>
-                    <span class="text-sm line-clamp-2 mt-2">{{ item.abstract }}</span>
+                    <div class="flex flex-row">
+                      <h1 class="font-medium grow">{{ item.title }}</h1>
+                      <span v-if="item.ref" class="text-sm font-medium text-rose-800">{{ item.ref.toUpperCase() }}</span>
+                    </div>
+                    <span class="text-sm font-medium text-gray-600">{{ item.filename }}</span>
+                    <span class="text-sm line-clamp-2 mt-2"><em>{{ item.abstract }}</em></span>
                     <div class="flex flex-row mt-2">
-                      <span class="text-sm font-medium text-sky-700 grow">{{ item.authors.join(', ') }}</span>
-                      <span class="text-sm font-medium text-teal-800">{{ item.status }}</span>
+                      <span class="text-sm font-medium text-sky-700 grow">{{ item.authors?.map(a => a.name).join(', ') }}</span>
+                      <span class="text-sm font-medium text-teal-800">{{ typeLabels[item.type] ?? '' }}</span>
                     </div>
                   </li>
                   <li v-if="!isLastPage">
@@ -116,7 +120,7 @@ const typesenseInstantsearchAdapter = new TypesenseInstantSearchAdapter({
   //  So you can pass any parameters supported by the search endpoint below.
   //  query_by is required.
   additionalSearchParameters: {
-    query_by: "ref,title,abstract,keywords,authors,adName,group,groupName,area,areaName",
+    query_by: "ref,filename,aliases,title,abstract,keywords,authors,adName,group,groupName,area,areaName",
   }
 })
 
@@ -124,11 +128,53 @@ const indexName = 'docs'
 const searchClient = typesenseInstantsearchAdapter.searchClient
 
 const initialUiState = {
-  docs: {
-    refinementList: {
-      type: ['draft']
-    }
-  }
+  // docs: {
+  //   refinementList: {
+  //     type: ['draft']
+  //   }
+  // }
+}
+
+const typeLabels = {
+  draft: 'Internet-Draft',
+  rfc: 'RFC'
+}
+
+const stateLabels = {
+  active: 'Active',
+  expired: 'Expired',
+  repl: 'Replaced',
+  idexists: 'I-D Exists',
+  pub: 'Published',
+  'wg-doc': 'WG Document',
+  rfcedack: 'RFC-Ed-Ack',
+  changed: 'Changed',
+  dead: 'Dead',
+  'sub-pub': 'Submitted to IESG for Publication',
+  noic: 'No IANA Actions',
+  'adopt-wg': 'Adopted by a WG',
+  'c-adopt': 'Call For Adoption By WG Issued',
+  'ok-act': 'IANA OK - Actions Needed',
+  'ok-noact': 'IANA OK - No Actions Needed',
+  'reviewers-ok': 'Expert Reviews OK',
+  'wg-cand': 'Candidate for WG Adoption',
+  rfcqueue: 'RFC Ed Queue',
+  'wg-lc': 'In WG Last Call',
+  writeupw: 'Waiting for Writeup'
+}
+
+function transformStateFacet (items) {
+  return items.map(item => ({
+    ...item,
+    label: stateLabels[item.value] ?? item.label
+  }))
+}
+
+function transformTypeFacet (items) {
+  return items.map(item => ({
+    ...item,
+    label: typeLabels[item.value] ?? item.label
+  }))
 }
 
 function cleanRefinementItems (items) {

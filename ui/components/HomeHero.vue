@@ -2,8 +2,10 @@
   <div class="hero bg-base-100">
     <div class="hero-content text-center pt-8">
       <div class="max-w-4xl">
-        <img class="w-48 mx-auto" src="https://static.ietf.org/logos/ietf.svg" alt="IETF">
-        <h1 class="text-5xl font-bold colorized">Datatracker</h1>
+        <div class="flex flex-row justify-center items-center">
+          <img class="w-32 me-4" src="https://static.ietf.org/logos/ietf.svg" alt="IETF">
+          <h1 class="text-5xl font-bold ms-4 colorized">Datatracker</h1>
+        </div>
         <p class="py-6">
           The IETF Datatracker is the day-to-day front-end to the IETF database for people who work on IETF standards.<br />
           It contains data about the documents, working groups, meetings, agendas, minutes, presentations, and more, of the IETF.
