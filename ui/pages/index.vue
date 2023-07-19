@@ -12,7 +12,7 @@
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">State</span>
-                <ais-refinement-list attribute="state.slug" :limit="5" :transform-items="transformStateFacet" show-more class="mt-2" />
+                <ais-refinement-list attribute="state.slug" :limit="5" :transform-items="transformStateFacet" show-more :sort-by="['isRefined', 'name']" class="mt-2" />
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Author</span>
@@ -20,11 +20,11 @@
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Group</span>
-                <ais-refinement-list attribute="group" :limit="10" show-more class="mt-2" />
+                <ais-refinement-list attribute="group" :limit="10" show-more :sort-by="['isRefined', 'name']" class="mt-2" />
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Area</span>
-                <ais-refinement-list attribute="area" :limit="10" show-more class="mt-2" />
+                <ais-refinement-list attribute="area" :limit="10" show-more :sort-by="['isRefined', 'name']" class="mt-2" />
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Area Director</span>
@@ -55,13 +55,10 @@
                 </div>
               </template>
             </ais-search-box>
-            <ais-infinite-hits class="mt-4">
+            <ais-hits class="mt-4">
               <template v-slot="{
                 items,
-                refinePrevious,
-                refineNext,
-                isLastPage,
-                sendEvent,
+                sendEvent
               }">
                 <ul>
                   <li v-for="item in items" :key="item.objectID" class="card bg-zinc-50 p-4 shadow-sm mb-2">
@@ -80,14 +77,10 @@
                       </div>
                     </div>
                   </li>
-                  <li v-if="!isLastPage">
-                    <button class="btn" @click="refineNext">
-                      Show more results
-                    </button>
-                  </li>
+                  <div class="flex flex-row justify-center"><ais-pagination /></div>
                 </ul>
               </template>
-            </ais-infinite-hits>
+            </ais-hits>
           </main>
         </div>
       </div>
@@ -101,7 +94,8 @@ import {
   AisInstantSearch,
   AisSearchBox,
   AisStats,
-  AisInfiniteHits,
+  AisHits,
+  AisPagination,
   AisRefinementList,
   AisClearRefinements
 } from 'vue-instantsearch/vue3/es'
