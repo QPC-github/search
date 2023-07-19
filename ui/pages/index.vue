@@ -66,7 +66,7 @@
                 <ul>
                   <li v-for="item in items" :key="item.objectID" class="card bg-zinc-50 p-4 shadow-sm mb-2">
                     <div class="flex flex-row">
-                      <h1 class="font-medium grow">{{ item.title }}</h1>
+                      <h1 class="font-medium grow"><a :href="`https://datatracker.ietf.org/doc/` + item.filename + `/`">{{ item.title }}</a></h1>
                       <span v-if="item.ref" class="text-sm font-medium text-rose-800">{{ item.ref.toUpperCase() }}</span>
                       <span v-else class="text-sm font-medium text-teal-800">{{ typeLabels[item.type] ?? '' }}</span>
                     </div>
