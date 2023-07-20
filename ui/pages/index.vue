@@ -20,11 +20,11 @@
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Group</span>
-                <ais-refinement-list attribute="group" :limit="10" show-more :sort-by="['isRefined', 'name']" class="mt-2" />
+                <ais-refinement-list attribute="group" searchable :limit="10" class="mt-2" />
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Area</span>
-                <ais-refinement-list attribute="area" :limit="10" show-more :sort-by="['isRefined', 'name']" class="mt-2" />
+                <ais-refinement-list attribute="area" :limit="10" show-more :show-more-limit="100" :sort-by="['isRefined', 'name']" class="mt-2" />
               </div>
               <div class="card bg-zinc-50 p-4 mt-4 shadow-md">
                 <span class="font-medium">Area Director</span>
